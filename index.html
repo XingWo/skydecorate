@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>光遇查身高</title>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	</head>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+			font-family: 隶书;
+		}
+		a,p,img,div{
+			user-select: none;
+		}
+		body{
+			height: 100vh;
+			min-width: 160vh;
+			background-image: url(img/starwo.png);
+			background-size: 100%;
+			background-position: center;
+			background-attachment: fixed;
+			display: flex;
+			    justify-content: center;
+			    align-items: center;
+		}
+		.box{
+			box-shadow: 5px 5px 15px #888888;
+			border-radius: 0.8vh;
+			height: 85vh;
+			width: 90vw;
+			background: rgba(255,255,255,0.1);
+			backdrop-filter: blur(1px);
+			display: flex;
+			flex-direction:column;
+			align-items: center;
+			justify-content: space-between;
+			position: relative;
+			transition:all 0.3s;
+		}
+			
+		.box:hover{
+			backdrop-filter: blur(3px);
+		}
+		h1,p,a,.result span{
+			color: transparent;
+			background-image: linear-gradient(to right,#00ffff,#aaaaff);
+			-webkit-background-clip: text;
+		}
+		
+		
+		
+		
+		.back{
+			top: 0;
+			left: 0;
+			opacity:0.2;
+			background:transparent !important;
+			margin: 0;
+			transition:all 0.3s;
+		}
+		.back:hover{
+			border-radius: 3px;
+			box-shadow: 0vh 0vh 3px 3px #00000031;
+			background: rgba(167, 167, 167, 0.5);
+			color: #00aaff;
+			opacity:0.9;
+		}
+		.component{
+			width: 100%;
+			height: 0%;
+			background-color: #ffffff;
+			position: absolute;
+			top: 0;
+			display: none;
+			transition:all 0.3s;
+		}
+		.component p{
+			font-size: 1.5em;
+			text-indent: 2em;
+		}
+		.component a{
+			font-size: 1.5em;
+			text-indent: 2em;
+		}
+		
+		.result{
+			width: 95%;
+			display: flex;
+		}
+		.result span{
+			font-size: 2.1em;
+		}
+		.result p{
+			font-size: 1.5em;
+			text-indent: 2em;
+		}
+	</style>
+	<script>
+		//uid方法
+		var url = window.location.href; // 获取当前链接
+		
+		// 检查链接是否包含参数
+		if (url.indexOf("?uid=") !== -1) {
+		  // 获取参数值
+				var params = url.split("?")[1];
+				
+				// 拆分参数对
+				var paramPairs = params.split("&");
+				
+				// 遍历参数对，查找指定参数
+				for (var i = 0; i < paramPairs.length; i++) {
+				  var pair = paramPairs[i].split("=");
+				  var paramName = pair[0];
+				  var paramVal = pair[1];
+				  
+				  // 检查参数名是否匹配
+				  if (paramName === "uid") {
+				    uid = paramVal;
+				    break;
+				  }
+				}
+				$.cookie('uid', uid, {expires:3000});
+				console.log(uid);//
+		  // 重定向到原链接
+				var newURL = url.split('?')[0]; // 去除?t后的部分
+				window.location.href = newURL; // 跳转到新链接
+		}
+		
+		//key方法
+		function keytext(){
+			var key=$("#keytext").val();
+			$.cookie('key', key, {expires:3000});
+			console.log(key);
+		}
+		//帮助页
+		function help(){
+			$('.component').css({
+				"display":"block",
+				"height":"100%",
+			})
+		}
+		function back(){
+			$('.component').css({
+				"display":"none",
+				"height":"0%",
+			})
+		}
+		$(document).on('keydown', function(e) {
+		    if (e.key === "Escape") {
+		        back();
+		    }
+		});
+		//获取回调
+		function fetchData() {
+			var uid = $.cookie('uid');
+			var key = $.cookie('key');
+				if(key){
+				}else{
+					help();
+				}
+			var apiUrl = "https://api.t1qq.com/api/sky/sc/sg?key="+key+"&cx="+uid;
+			  
+			fetch(apiUrl)
+				.then(response => response.json())
+				.then(data => {
+					var scale = data.data.scale;
+					document.getElementById("scale").innerHTML = "体型值：" + scale;
+					var height = data.data.height;
+					document.getElementById("height").innerHTML = "身高值：" + height;
+					var currentheight = data.data.currentHeight;
+					document.getElementById("currentheight").innerHTML = "当前身高：" + currentheight;
+					var maxheight = data.data.maxHeight;
+					document.getElementById("maxheight").innerHTML = "最大身高：" + maxheight;
+					var minheight = data.data.minHeight;
+					document.getElementById("minheight").innerHTML = "最小身高：" + minheight;
+					var attitude = data.action.attitude;
+					document.getElementById("attitude").innerHTML = "站姿：" + attitude;
+					var voice = data.action.voice;
+					document.getElementById("voice").innerHTML = "叫声：" + voice;
+					var cloak = data.adorn.cloak;
+					document.getElementById("cloak").innerHTML = "斗篷：" + cloak;
+					var prop = data.adorn.prop;
+					document.getElementById("prop").innerHTML = "背饰：" + prop;
+					var neck = data.adorn.neck;
+					document.getElementById("neck").innerHTML = "项链：" + neck;
+					var mask = data.adorn.mask;
+					document.getElementById("mask").innerHTML = "面具：" + mask;
+					var horn = data.adorn.horn;
+					document.getElementById("horn").innerHTML = "头饰：" + horn;
+					var hair = data.adorn.hair;
+					document.getElementById("hair").innerHTML = "发型：" + hair;
+					var pants = data.adorn.pants;
+					document.getElementById("pants").innerHTML = "裤子：" + pants;
+				})
+				.catch(error => {
+					console.log("出错了，请看帮助页");
+					help();
+				});
+		}
+	</script>
+	<body onload="fetchData()">
+		<div class="box">
+			<h1 class="titleon">查询结果</h1>
+				<div class="result">
+					<div style="width: 50%;">
+						<span>光崽身高</span>
+						<p id="scale">体型值：</p>
+						<p id="height">身高值：</p>
+						<p id="currentheight">当前身高：</p>
+						<p id="maxheight">最大身高：</p>
+						<p id="minheight">最小身高：</p>
+						<span>当前站姿/叫声</span>
+						<p id="attitude">站姿：</p>
+						<p id="voice">叫声：</p>
+					</div>
+					<div style="width: 50%;">
+						<span>光崽装扮</span>
+						<p id="cloak">斗篷：</p>
+						<p id="prop">背饰：</p>
+						<p id="neck">项链：</p>
+						<p id="mask">面具：</p>
+						<p id="horn">头饰：</p>
+						<p id="hair">发型：</p>
+						<p id="pants">裤子：</p>
+					</div>
+				</div>
+			<p onclick="help()">帮助/说明</p>
+		</div>
+		<div class="component">
+			<span class="back" onclick="back()">◀返回</span>
+			<p></p>
+			<a>使用方法：</a>
+			<p>1.在游戏中登录需要查询的账号后打开“设置-精灵-游戏精灵”</p>
+			<p>2.在对话框里输入“id”后点击提问</p>
+			<p>3.在新出现页面找到原ID并复制该长串字符</p>
+			<p>4.将自己的id输入在本页面地址栏后,输入后为"skydecorate.starwo.top?uid="+原ID</p>
+			<p>5.输入完毕后回车跳转即可</p>
+			<p>6.如遇到key问题请先获取key并在此输入<input placeholder="使用的key(自动保存)" oninput="keytext()" id="keytext" type="text" value=""></p>
+		</div>
+	</body>
+</html>
