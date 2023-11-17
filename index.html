@@ -26,6 +26,9 @@
 			    justify-content: center;
 			    align-items: center;
 		}
+		::-webkit-scrollbar{
+			display: none;
+		}
 		.box{
 			box-shadow: 5px 5px 15px #888888;
 			border-radius: 0.8vh;
@@ -33,16 +36,18 @@
 			width: 90vw;
 			background: rgba(255,255,255,0.1);
 			backdrop-filter: blur(1px);
+			overflow: scroll;
+			transition:all 0.3s;
+		}
+		.box:hover{
+			background: rgba(255,255,255,0.3);
+			backdrop-filter: blur(3px);
+		}
+		.boxnr{
 			display: flex;
 			flex-direction:column;
 			align-items: center;
 			justify-content: space-between;
-			position: relative;
-			transition:all 0.3s;
-		}
-			
-		.box:hover{
-			backdrop-filter: blur(3px);
 		}
 		h1,p,a,.result span{
 			color: transparent;
@@ -122,7 +127,7 @@
 				    break;
 				  }
 				}
-				$.cookie('uid', uid, {expires:3000});
+				$.cookie('uid', uid);
 				console.log(uid);//
 		  // 重定向到原链接
 				var newURL = url.split('?')[0]; // 去除?t后的部分
@@ -156,6 +161,11 @@
 		//获取回调
 		function fetchData() {
 			var uid = $.cookie('uid');
+				if(uid){
+				}else{
+					var uid = prompt("请输入需要查询的长ID：");
+					$.cookie('uid', uid);
+				}
 			var key = $.cookie('key');
 				if(key){
 				}else{
@@ -203,31 +213,33 @@
 	</script>
 	<body onload="fetchData()">
 		<div class="box">
-			<h1 class="titleon">查询结果</h1>
-				<div class="result">
-					<div style="width: 50%;">
-						<span>光崽身高</span>
-						<p id="scale">体型值：</p>
-						<p id="height">身高值：</p>
-						<p id="currentheight">当前身高：</p>
-						<p id="maxheight">最大身高：</p>
-						<p id="minheight">最小身高：</p>
-						<span>当前站姿/叫声</span>
-						<p id="attitude">站姿：</p>
-						<p id="voice">叫声：</p>
+			<div class="boxnr">
+				<h1 class="titleon">查询结果</h1>
+					<div class="result">
+						<div style="width: 50%;">
+							<span>光崽身高</span>
+							<p id="scale">体型值：</p>
+							<p id="height">身高值：</p>
+							<p id="currentheight">当前身高：</p>
+							<p id="maxheight">最大身高：</p>
+							<p id="minheight">最小身高：</p>
+							<span>当前站姿/叫声</span>
+							<p id="attitude">站姿：</p>
+							<p id="voice">叫声：</p>
+						</div>
+						<div style="width: 50%;">
+							<span>光崽装扮</span>
+							<p id="cloak">斗篷：</p>
+							<p id="prop">背饰：</p>
+							<p id="neck">项链：</p>
+							<p id="mask">面具：</p>
+							<p id="horn">头饰：</p>
+							<p id="hair">发型：</p>
+							<p id="pants">裤子：</p>
+						</div>
 					</div>
-					<div style="width: 50%;">
-						<span>光崽装扮</span>
-						<p id="cloak">斗篷：</p>
-						<p id="prop">背饰：</p>
-						<p id="neck">项链：</p>
-						<p id="mask">面具：</p>
-						<p id="horn">头饰：</p>
-						<p id="hair">发型：</p>
-						<p id="pants">裤子：</p>
-					</div>
-				</div>
-			<p onclick="help()">帮助/说明</p>
+				<p onclick="help()">帮助/说明</p>
+			</div>
 		</div>
 		<div class="component">
 			<span class="back" onclick="back()">◀返回</span>
